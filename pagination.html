@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      .btn-active {
+        background-color: aqua;
+        color: black;
+        font-weight: 600;
+      }
+
+      .btn-disable {
+        opacity: 0.5;
+        cursor: default;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <button id="btnPrev">Prev</button>
+      <div id="btnPages"></div>
+      <button id="btnNext">Next</button>
+    </div>
+
+    <script>
+      const numbers = [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+        21, 22, 23,
+      ];
+
+      const btnPagesElement = document.querySelector("#btnPages");
+      const btnPrevElement = document.querySelector("#btnPrev");
+      const btnNextElement = document.querySelector("#btnNext");
+
+      let currentPage = 1; // Trang hiện tại
+      const totalRecord = 51; // Tổng số bản ghi
+      const totalPerPage = 10; // Tổng số bản ghi / 1 trang
+      // => Tổng số trang: Math.ceil(totalRecord / totalPerPage)
+
+      // Tính tổng số trang
+      const totalPage = Math.ceil(numbers.length / totalPerPage);
+
+      const renderPages = () => {
+        // Clear kết quả trước đấy
+        btnPagesElement.textContent = "";
+
+        // Hiển thị ra danh sách trang (button)
+        for (let i = 1; i <= totalPage; i++) {
+          const btnElement = document.createElement("button");
+          //   Gán tiêu đề cho button
+          btnElement.textContent = i;
+
+          //   active cho button được chọn (trang hiện tại)
+          if (currentPage === i) {
+            btnElement.classList.add("btn-active");
+          }
+
+          //   Lắng nghe sự kiện khi click vào từng button
+          btnElement.addEventListener("click", function () {
+            // gán lại trang hiện tại là giá trị mà nút bấm vào
+            currentPage = i;
+
+            // Gọi hàm renderPage để cập nhật lại giao diện
+            renderPages();
+          });
+
+          btnPagesElement.appendChild(btnElement);
+        }
+
+        const start = (currentPage - 1) * totalPerPage; // (Trang hiện tại - 1) * Số bản ghi/trang
+        const end = totalPerPage * currentPage;
+
+        const result = numbers.slice(start, end);
+        console.log("result: ", result);
+
+        // Disable đi các button next, prev khi điều kiện không thỏa mãn
+        if (currentPage === 1) {
+          document
+            .querySelector("#btnPrev")
+            .setAttribute("disabled", "disabled");
+        } else {
+          document.querySelector("#btnPrev").removeAttribute("disabled");
+        }
+
+        if (currentPage === totalPage) {
+          document
+            .querySelector("#btnNext")
+            .setAttribute("disabled", "disabled");
+        } else {
+          document.querySelector("#btnNext").removeAttribute("disabled");
+        }
+      };
+
+      btnNextElement.addEventListener("click", function () {
+        // Tăng trang hiện tại lên 1
+        // Điều kiện để tiếp tục tăng: trang hiện tại phải < tổng số trang
+        if (currentPage < totalPage) {
+          currentPage++;
+
+          renderPages();
+        }
+      });
+
+      btnPrevElement.addEventListener("click", function () {
+        // Giảm trang hiện tại đi 1
+        // Điều kiện để giảm: trang hiện tại > 1
+        if (currentPage > 1) {
+          currentPage--;
+
+          renderPages();
+        }
+        console.log("currentPage: ", currentPage);
+      });
+
+      renderPages();
+    </script>
+  </body>
+</html>

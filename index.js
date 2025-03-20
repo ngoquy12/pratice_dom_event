@@ -87,6 +87,24 @@ const formElement = document.querySelector("#form");
 const btnShowFormElement = document.querySelector("#btnShowForm");
 const btnCloseElement = document.querySelector("#btnClose");
 
+// Hàm định dạng thời gian
+function formatDate(time) {
+  const today = new Date(time);
+
+  //   Lấy ra ngày
+  let day = today.getDate();
+  if (day > 0 && day < 10) day = `0${day}`;
+
+  //   Lấy ra tháng
+  let month = today.getMonth() + 1;
+  if (month > 0 && month < 10) month = `0${month}`;
+
+  //   Lấy ra năm
+  const year = today.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
 function renderData() {
   const htmls = students.map((student, index) => {
     return `
@@ -135,13 +153,52 @@ function handleDelete(index) {
   }
 }
 
+// Hàm làm rỗng tất cả các giá trị trong input
+function handleReseForm() {
+  document.querySelector("#studentName").value = "";
+  document.querySelector("#gender").value = "";
+  document.querySelector("#dateBirth").value = "";
+  document.querySelector("#email").value = "";
+  document.querySelector("#address").value = "";
+}
+
 const handleAddStudent = () => {
   // Lấy dữ liệu từ Form
+  const studentNameValue = document.querySelector("#studentName").value;
+  const gendervalue = document.querySelector("#gender").value;
+  const dateBirthvalue = document.querySelector("#dateBirth").value;
+  const emailvalue = document.querySelector("#email").value;
+  const addressvalue = document.querySelector("#address").value;
   // Validate dữ liệu
   // Thêm dữ liệu vào mảng
+  const newStudent = {
+    id: Math.ceil(Math.random() * 10000),
+    studentName: studentNameValue,
+    gender: +gendervalue,
+    dateBirth: formatDate(dateBirthvalue),
+    email: emailvalue,
+    address: addressvalue,
+  };
+
+  students.push(newStudent);
+
   // Đóng Form
+  handleCloseForm();
+
+  //   Reset form
+  handleReseForm();
+
   // Reder lại dữ liệu  mới nhất cho giao diện
+  renderData();
 };
+
+// Gọi sự kiện Submit form
+formElement.addEventListener("submit", function (event) {
+  // Ngăn chặn sự kiện load lại trang
+  event.preventDefault();
+
+  handleAddStudent();
+});
 
 // Hàm mở form
 function handleShowForm() {
