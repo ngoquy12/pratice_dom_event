@@ -9,6 +9,12 @@
       #form {
         display: none;
       }
+
+      .btn-active {
+        background-color: red;
+        color: #fff;
+        font-weight: 600;
+      }
     </style>
   </head>
   <body>
@@ -65,12 +71,12 @@
         </tr>
       </tbody>
     </table>
-    <div>
-      <button>Prev</button>
-      <button>1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>Next</button>
+
+    <!-- Phân trang -->
+    <div style="display: flex; margin-top: 12px; gap: 12px">
+      <button id="btnPrev">Prev</button>
+      <div id="btnPages"></div>
+      <button id="btnNext">Next</button>
     </div>
     <script src="./index.js"></script>
   </body>

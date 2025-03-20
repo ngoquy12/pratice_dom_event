@@ -81,11 +81,101 @@ const students = [
   },
 ];
 
+// elements = 10
+// page 1: 0, 5
+// page 2: 6, 10
+
 // Phạm vi truy xuất cac phần tử trong DOM
 const tbodyElement = document.querySelector("#tbody");
 const formElement = document.querySelector("#form");
 const btnShowFormElement = document.querySelector("#btnShowForm");
 const btnCloseElement = document.querySelector("#btnClose");
+const btnPagesElement = document.querySelector("#btnPages");
+const btnPrevElement = document.querySelector("#btnPrev");
+const btnNextElement = document.querySelector("#btnNext");
+
+// Tạo các biến toàn cục
+let curentPage = 1;
+const totalPerpage = 3;
+
+// Tổng số trang
+const totalPage = Math.ceil(students.length / totalPerpage);
+
+// Hàm render danh sách các nút
+const renderPages = () => {
+  // Clear kết quả của lần render trước đấy
+  btnPagesElement.textContent = "";
+
+  // Hiển thị ra từng nút
+  for (let i = 1; i <= totalPage; i++) {
+    // Tạo từng button
+    const btnElement = document.createElement("button");
+
+    // Gán tiêu đề cho button
+    btnElement.textContent = i;
+
+    // Kiểm tra button nào đang được active
+    if (curentPage === i) {
+      btnElement.classList.add("btn-active");
+    }
+
+    // Disable đi nút prev khi trang hiện tại là 1
+    if (curentPage === 1) {
+      document.querySelector("#btnPrev").setAttribute("disabled", "disabled");
+    } else {
+      document.querySelector("#btnPrev").removeAttribute("disabled");
+    }
+
+    // Disable đi nút next khi trang hiện tại = với tổng số trang
+    if (curentPage === totalPage) {
+      document.querySelector("#btnNext").setAttribute("disabled", "disabled");
+    } else {
+      document.querySelector("#btnNext").removeAttribute("disabled");
+    }
+
+    // Lắng nghe sự kiện khi click vào từng nút
+    btnElement.addEventListener("click", function () {
+      // Gán lại vị trí của button
+      curentPage = i;
+
+      renderPages();
+
+      // Gọi hàm renderData để cập nhật lại giao diện
+      renderData();
+    });
+
+    // Gán từng button vào id btnPages
+    btnPagesElement.appendChild(btnElement);
+  }
+};
+
+// Lắng nghe sự kiện click vào nút next
+btnNextElement.addEventListener("click", function () {
+  // Xác định điều kiện dừng khi tăng hiện tại lên 1
+  if (curentPage < totalPage) {
+    curentPage++;
+
+    renderPages();
+
+    // Gọi hàm renderData để cập nhật lại giao diện
+    renderData();
+  }
+});
+
+// Lắng nghe sự kiện click vào nút prev
+btnPrevElement.addEventListener("click", function () {
+  // Xác định điều kiện dừng khi giảm hiện tại lên 1
+  if (curentPage > 1) {
+    curentPage--;
+
+    renderPages();
+
+    // Gọi hàm renderData để cập nhật lại giao diện
+    renderData();
+  }
+});
+
+renderPages();
 
 // Hàm định dạng thời gian
 function formatDate(time) {
@@ -106,7 +196,16 @@ function formatDate(time) {
 }
 
 function renderData() {
-  const htmls = students.map((student, index) => {
+  // Vị trí bắt đầu lấy
+  const getStartIndex = (curentPage - 1) * totalPerpage;
+
+  // Vị trí kết thúc
+  const getEndIndex = totalPerpage * curentPage;
+
+  // Lấy ra khoảng vị trí của các phần tử trong mảng
+  const studentSlices = students.slice(getStartIndex, getEndIndex);
+
+  const htmls = studentSlices.map((student, index) => {
     return `
             <tr>
               <td>${index + 1}</td>
