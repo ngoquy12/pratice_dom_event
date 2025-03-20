@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      #form {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>List Student</h3>
+    <form id="form">
+      <input type="text" id="studentName" placeholder="Enter student name" />
+      <br />
+      <select id="gender">
+        <option value="0">Male</option>
+        <option value="1">Female</option>
+        <option value="2">Other</option>
+      </select>
+      <br />
+      <input type="date" id="dateBirth" /> <br />
+      <input type="email" id="email" placeholder="Enter email" /> <br />
+      <textarea id="address" placeholder="Enter address"></textarea> <br />
+      <br />
+      <div>
+        <button type="button" id="btnClose">Close</button>
+        <button type="submit" id="btnAdd">Add</button>
+      </div>
+    </form>
+
+    <div>
+      <button id="btnShowForm">Add student</button>
+    </div>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Date Birth</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th colspan="2">Option</th>
+        </tr>
+      </thead>
+
+      <tbody id="tbody">
+        <tr>
+          <td>1</td>
+          <td>David</td>
+          <td>Male</td>
+          <td>12/12/2024</td>
+          <td>david@gmail.com</td>
+          <td>Ha Noi</td>
+          <td>
+            <button>Edit</button>
+          </td>
+          <td>
+            <button>Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <script src="./index.js"></script>
+  </body>
+</html>
